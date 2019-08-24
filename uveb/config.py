@@ -2,8 +2,8 @@ import os
 from dotenv import load_dotenv
 
 
-PROJECT_FOLDER          = os.path.expanduser('/Users/apple/Desktop/uveb_b')
-load_dotenv(os.path.join(PROJECT_FOLDER, '.env'))
+# PROJECT_FOLDER          = os.path.expanduser('/Users/apple/Desktop/uveb_b')
+# load_dotenv(os.path.join(PROJECT_FOLDER, '.env'))
 
 
 PROJECT_NAME            = os.getenv('PROJECT_NAME')
