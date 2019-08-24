@@ -25,9 +25,28 @@ api = Api(app)
 
 from uveb.controllers.db import Init
 from uveb.resources.index import IndexResource
+from uveb.resources.users.general import UserInfoResource, VerifyPasswordResource, CreatePasswordResource, \
+    SignUpResource, LoginResource, ResendCodeResource, AuthCodeResource, ForgetPasswordResource
+# user loginRequired
+from uveb.resources.videos.general import MainPageVideosByPropResource, WatchOneVideoResource, \
+    UpdateVideoStatsResource
+# video loginRequired
 
 
 api.add_resource(IndexResource, '/')
+
+api.add_resource(UserInfoResource, '/user')
+api.add_resource(SignUpResource, '/signup')
+api.add_resource(LoginResource, '/login')
+api.add_resource(VerifyPasswordResource, '/verify_password')
+api.add_resource(CreatePasswordResource, '/create_password')
+api.add_resource(ResendCodeResource, '/resend_code')
+api.add_resource(AuthCodeResource, '/auth_code')
+api.add_resource(ForgetPasswordResource, '/forget_password')
+
+api.add_resource(MainPageVideosByPropResource, '/videos')
+api.add_resource(WatchOneVideoResource, '/videos/watch')
+api.add_resource(UpdateVideoStatsResource, '/videos/update_stats')
 
 
 @app.before_request
@@ -49,5 +68,5 @@ def after_request(response):
     return response
 
 
-if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=4000)
+# if __name__ == '__main__':
+#     app.run(host='127.0.0.1', port=4000)
