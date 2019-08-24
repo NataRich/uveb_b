@@ -25,7 +25,7 @@ class UserModel(Models):
     @classmethod
     def init(cls, username, email, password):
         u = cls(username, email, password, date=cls.now(), authenticated=1)
-        u.hash_password(password).identify()
+        u.hash_password(u.password_hash).identify()
 
         return u
 
