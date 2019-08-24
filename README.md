@@ -1,38 +1,38 @@
 # uveb_b
 This is the backend for uveb.
 
-### Dependencies
+## Dependencies
 Running the following commands in terminal/cmd will have all dependencies installed on your machine.
 ```
 . venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Development
-#### Language Version
+## Development
+### Language Version
 Python 3.7
 
-#### Framework
+### Framework
 Flask 1.1.1
 
-#### Compression Libraries in Use
+### Compression Libraries in Use
 ffmpeg-python 0.2.0
 Pillow 6.1.0
 
-### Storage Management
+## Storage Management
 Amazon Web Service (AWS) S3 — cloud storage
 
-### Deployment
-#### Web Server
+## Deployment
+### Web Server
 Heroku
 
-#### Add-ons
+### Add-ons
 ClearDB MySQL
 
-### Mail Server
-#### Zimbra
+## Mail Server
+### Zimbra
 in development
 
-### Contributors
+## Contributors
 Initial contributor: Marko Vejnovic\
 Subsequent contributor: Jaylan Zhao
