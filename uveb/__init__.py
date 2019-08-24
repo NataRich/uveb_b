@@ -30,8 +30,8 @@ from uveb.resources.index import IndexResource
 api.add_resource(IndexResource, '/')
 
 
-@app.before_first_request
-def before_first_request():
+@app.before_request
+def before_request():
     conn = connect(
         host=app.config['DB_HOST'],
         user=app.config['DB_USER'],
@@ -50,4 +50,4 @@ def after_request(response):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='127.0.0.1', port=4000)
