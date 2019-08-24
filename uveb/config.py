@@ -23,4 +23,5 @@ PROD_DB_PASS            = os.getenv('PROD_DB_PASS')
 PROD_DB_SCHEMA          = os.getenv('PROD_DB_SCHEMA')
 
 UPLOAD_PATH             = os.getenv('UPLOAD_PATH')
+SECRET_KEY              = os.getenv('SECRET_KEY')
 
