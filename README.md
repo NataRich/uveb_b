@@ -16,7 +16,7 @@ Python 3.7
 Flask 1.1.1
 
 ### Compression Libraries in Use
-ffmpeg-python 0.2.0
+ffmpeg-python 0.2.0 \
 Pillow 6.1.0
 
 ## Storage Management
