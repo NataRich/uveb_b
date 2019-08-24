@@ -6,7 +6,6 @@ from . import Models
 
 
 class UserModel(Models):
-
     def __init__(self, username, email, password_hash, id=None,
                  identity=None, date=None, num_video=None, authenticated=None,
                  thumb_image=None, medium_image=None):
