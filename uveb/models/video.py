@@ -163,7 +163,26 @@ class VideoModel(Models):
     def set_dir(self):
         self.dir = app.config['UPLOAD_PATH'] + f"{str(self.user_id)}/videos/{self.track_id}/"
 
-    def serialize(self):
+    def serialize(self, tags=None):
+        if tags:
+            return {
+                'userId': self.user_id,
+                'title': self.title,
+                'author': self.author,
+                'description': f"""{self.description}""",
+                'id': self.id,
+                'duration': self.duration,
+                'trackId': self.track_id,
+                'resW': self.res_w,
+                'resH': self.res_h,
+                'dir': self.dir,
+                'size': self.size,
+                'date': self.date,
+                'likes': self.likes,
+                'views': self.views,
+                'hotness': self.hotness,
+                'tags': tags.serialize()
+            }
         return {
             'userId': self.user_id,
             'title': self.title,

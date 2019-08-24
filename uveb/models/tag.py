@@ -59,15 +59,7 @@ class TagModel(Models):
     def id(self, id):
         self._id = id
 
-    def serialize(self, append=False):
-        if append:
-            return {
-                "tags": {
-                    "vr": self.vr,
-                    'campus': self.campus,
-                    'event': self.event
-                }
-            }
+    def serialize(self):
         return {
             'id': self.id,
             'videoId': self.video_id,
