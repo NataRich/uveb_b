@@ -22,5 +22,5 @@ PROD_DB_USER            = os.getenv('PROD_DB_USER')
 PROD_DB_PASS            = os.getenv('PROD_DB_PASS')
 PROD_DB_SCHEMA          = os.getenv('PROD_DB_SCHEMA')
 
-
+UPLOAD_PATH             = os.getenv('UPLOAD_PATH')
 
