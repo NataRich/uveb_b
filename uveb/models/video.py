@@ -1,4 +1,5 @@
 # Video Model
+from datetime import datetime
 
 
 class VideoModel:
@@ -21,6 +22,12 @@ class VideoModel:
         self.likes = likes
         self.views = views
         self.hotness = hotness
+
+    @classmethod
+    def init(cls, user_id, title, author, description, track_id):
+        date = datetime.today().strftime("%Y-%m-%d %H:%M:%S")
+
+
 
     def serialize(self, tag=None):
         if tag:
