@@ -45,7 +45,7 @@ api.add_resource(AuthCodeResource, '/auth_code')
 api.add_resource(ForgetPasswordResource, '/forget_password')
 
 api.add_resource(MainPageVideosByPropResource, '/videos')
-api.add_resource(WatchOneVideoResource, '/videos/watch')
+api.add_resource(WatchOneVideoResource, '/videos/fetch')
 api.add_resource(UpdateVideoStatsResource, '/videos/update_stats')
 
 
