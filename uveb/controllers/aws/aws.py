@@ -30,10 +30,10 @@ class AWS:
     def upload_profile(img_obj, user_id):
         try:
             ext = img_obj.filename.split('.')[1]
-            key = 'users/' + str(user_id) + '/profile/original.' + ext
+            key = f'uploads/images/original{user_id}.' + ext
             s3.upload_fileobj(
                 img_obj,
-                Main_Bucket,
+                Temp_Bucket,
                 key,
                 ExtraArgs={
                     'ContentType': img_obj.content_type
@@ -46,10 +46,9 @@ class AWS:
         return True
 
     @staticmethod
-    def upload_video(video_obj, user_id, track_id):
+    def upload_video(video_obj, track_id):
         try:
             ext = video_obj.filename.split('.')[1]
-            # key = 'users/' + str(user_id) + '/videos/' + track_id + '/original.' + ext
             key = 'uploads/videos/' + track_id + '.' + ext
             s3.upload_fileobj(
                 video_obj,
@@ -68,7 +67,7 @@ class AWS:
     @staticmethod
     def get_video_info(key):
         metadata = ffmpeg.probe(app.config['TEMP_STORE_PATH'] + key)
-        obj = resource.Object(Main_Bucket, key)
+        obj = resource.Object(Temp_Bucket, key)
         file_size = obj.content_length
         return {
                 'duration': int(metadata['streams'][0]['duration']),
