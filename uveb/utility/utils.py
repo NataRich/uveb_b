@@ -6,7 +6,7 @@ from ..controllers.db.fetchers import VideoFetcher
 
 def gen_key(l=24):
     key = string.ascii_letters
-    res = ''.join(random.choice(key) for i in range(l)) + str(id)
+    res = ''.join(random.choice(key) for i in range(l))
 
     if VideoFetcher.fetch_by_track_id(res):
         return gen_key()

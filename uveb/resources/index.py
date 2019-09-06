@@ -8,7 +8,7 @@ class IndexResource(Resource):
     @staticmethod
     def get():
         return jsonify({
-            'Project_Name': app.config['PROJECT_NAME'],
+            'Project': app.config['PROJECT_NAME'],
             'Version': app.config['VERSION']
         })
 

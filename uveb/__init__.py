@@ -27,10 +27,11 @@ from uveb.controllers.db import Init
 from uveb.resources.index import IndexResource
 from uveb.resources.users.general import UserInfoResource, VerifyPasswordResource, CreatePasswordResource, \
     SignUpResource, LoginResource, ResendCodeResource, AuthCodeResource, ForgetPasswordResource
-# user loginRequired
+from uveb.resources.users.loginRequired import LogoutResource, ChangeAccountResource, ChangeProfileImageResource
 from uveb.resources.videos.general import MainPageVideosByPropResource, WatchOneVideoResource, \
     UpdateVideoStatsResource
-# video loginRequired
+from uveb.resources.videos.loginRequired import UploadOneVideoResource, UploadVideoInfoResource, \
+    SelfUploadedVideoResource, DeleteVideoResource
 
 
 api.add_resource(IndexResource, '/')
@@ -44,9 +45,18 @@ api.add_resource(ResendCodeResource, '/resend_code')
 api.add_resource(AuthCodeResource, '/auth_code')
 api.add_resource(ForgetPasswordResource, '/forget_password')
 
+api.add_resource(LogoutResource, '/logout')
+api.add_resource(ChangeAccountResource, '/profile/change_account')
+api.add_resource(ChangeProfileImageResource, '/profile/change_image')
+
 api.add_resource(MainPageVideosByPropResource, '/videos')
 api.add_resource(WatchOneVideoResource, '/videos/fetch')
 api.add_resource(UpdateVideoStatsResource, '/videos/update_stats')
+
+api.add_resource(UploadOneVideoResource, '/videos/upload_file')
+api.add_resource(UploadVideoInfoResource, '/videos/upload_info')
+api.add_resource(SelfUploadedVideoResource, '/videos/self_all')
+api.add_resource(DeleteVideoResource, '/videos/delete_file')
 
 
 @app.before_request
@@ -68,5 +78,5 @@ def after_request(response):
     return response
 
 
-# if __name__ == '__main__':
-#     app.run(host='127.0.0.1', port=4000)
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=4000)
