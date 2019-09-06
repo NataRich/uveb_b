@@ -1,6 +1,5 @@
 import boto3
 import ffmpeg
-from datetime import timedelta
 
 from uveb import app
 
@@ -8,7 +7,11 @@ from uveb import app
 s3 = boto3.client('s3',
                   aws_access_key_id=app.config['AWS_ACCESS_KEY'],
                   aws_secret_access_key=app.config['AWS_SECRET_KEY'])
-Bucket = app.config['BUCKET']
+resource = boto3.resource('s3',
+                          aws_access_key_id=app.config['AWS_ACCESS_KEY'],
+                          aws_secret_access_key=app.config['AWS_SECRET_KEY'])
+Main_Bucket = app.config['MAIN_BUCKET']
+Temp_Bucket = app.config['TEMP_BUCKET']
 
 
 class AWS:
@@ -30,7 +33,7 @@ class AWS:
             key = 'users/' + str(user_id) + '/profile/original.' + ext
             s3.upload_fileobj(
                 img_obj,
-                Bucket,
+                Main_Bucket,
                 key,
                 ExtraArgs={
                     'ContentType': img_obj.content_type
@@ -46,10 +49,11 @@ class AWS:
     def upload_video(video_obj, user_id, track_id):
         try:
             ext = video_obj.filename.split('.')[1]
-            key = 'users/' + str(user_id) + '/videos/' + track_id + '/original.' + ext
+            # key = 'users/' + str(user_id) + '/videos/' + track_id + '/original.' + ext
+            key = 'uploads/videos/' + track_id + '.' + ext
             s3.upload_fileobj(
                 video_obj,
-                Bucket,
+                Temp_Bucket,
                 key,
                 ExtraArgs={
                     'ContentType': video_obj.content_type
@@ -62,31 +66,35 @@ class AWS:
         return True
 
     @staticmethod
-    def get_video_info(video_obj):
-        # print(s3.head_object(Bucket=Bucket, Key='users/2/videos/dHSaMhuVQgTtzhrwIyPhmDRy/original.mp4'))
-        # metadata = s3.head_object(Bucket=Bucket, Key=key)
-        # print(metadata['ResponseMetadata']['HTTPHeaders']['content-length'])
-        metadata = ffmpeg.probe(video_obj.decode())
-        for stream in metadata.streams:
-            print(stream)
+    def get_video_info(key):
+        metadata = ffmpeg.probe(app.config['TEMP_STORE_PATH'] + key)
+        obj = resource.Object(Main_Bucket, key)
+        file_size = obj.content_length
         return {
-                # 'duration': str(timedelta(seconds=int(float(video_info['duration'])))),
-                # 'width': video_info['width'],
-                # 'height': video_info['height']
-                'duration': '00:00:00',
-                'width': 1920,
-                'height': 1080
+                'duration': int(metadata['streams'][0]['duration']),
+                'width': int(metadata['streams'][0]['width']),
+                'height': int(metadata['streams'][0]['height']),
+                'size': file_size
             }
 
     @staticmethod
-    def remove_video(track_id, user_id):
+    def cancel_video_upload(key):
         try:
-            dir = f"users/{user_id}/videos/{track_id}/"
-            bucket = s3.get_bucket(Bucket)
-            for obj in bucket.list(prefix=dir):
-                obj.delete()
+            print(key)
+            resource.Object(Temp_Bucket, key).delete()
 
         except Exception as e:
-            print('REMOVE VIDEO Error:', e)
+            print('CANCEL VIDEO UPLOAD Error:', e)
+            return False
+        return True
+
+    @staticmethod
+    def remove_one_video(prefix):
+        try:
+            bucket = resource.Bucket(Main_Bucket)
+            bucket.objects.filter(Prefix=prefix).delete()
+
+        except Exception as e:
+            print('REMOVE ONE VIDEO Error:', e)
             return False
         return True

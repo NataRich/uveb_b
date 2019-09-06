@@ -22,12 +22,14 @@ PROD_DB_USER            = os.getenv('PROD_DB_USER')
 PROD_DB_PASS            = os.getenv('PROD_DB_PASS')
 PROD_DB_SCHEMA          = os.getenv('PROD_DB_SCHEMA')
 
-UPLOAD_PATH             = os.getenv('UPLOAD_PATH')
+PERM_STORE_PATH         = os.getenv('PERM_STORE_PATH')
+TEMP_STORE_PATH         = os.getenv('TEMP_STORE_PATH')
 SECRET_KEY              = os.getenv('SECRET_KEY')
 
 AWS_ACCESS_KEY          = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_KEY          = os.getenv('AWS_SECRET_KEY')
-BUCKET                  = os.getenv('BUCKET')
+MAIN_BUCKET             = os.getenv('MAIN_BUCKET')
+TEMP_BUCKET             = os.getenv('TEMP_BUCKET')
 
 TESTING                 = False if os.getenv('MAIL_TESTING') == 'False' else True
 MAIL_SERVER             = os.getenv('MAIL_SERVER')

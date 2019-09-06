@@ -1,8 +1,6 @@
 from flask import request, session, jsonify
 from flask_restful import Resource
-import ffmpeg
 
-from .. import app
 from .. import VideoModel, TagModel
 from .. import UserUpdater
 from .. import VideoFetcher, VideoAdder, VideoDeleter
@@ -19,29 +17,25 @@ class UploadOneVideoResource(Resource):
             return jsonify({'status': 3008})
 
         video = request.files['file']
-
-        AWS.get_video_info(video.read())
-
         ext = video.filename.split('.')[1]
         if not AWS.is_ext_allowed(ext, 'video'):
             return jsonify({'status': 3007})
 
         track_id = gen_key()
-        if not AWS.upload_video(video, session['id'], gen_key()):
+        if not AWS.upload_video(video, session['id'], track_id):
             return jsonify({'status': 4444})
 
         session['TRACK_ID'] = track_id
-        session['KEY'] = 'users/' + str(session['id']) + '/videos/' + track_id + '/original.' + ext
-        session['VIDEO_SIZE'] = video.content_length
+        session['AWS_S3_TEMP_KEY'] = 'uploads/videos/' + f'{track_id}.' + ext
         return jsonify({'status': 2000})
 
     @staticmethod
     @login_required
     def get():
-        if 'TRACK_ID' in session:
+        if 'TRACK_ID' not in session:
             return jsonify({'status': 3009})
 
-        if not AWS.remove_video(session['TRACK_ID'], session['id']):
+        if not AWS.cancel_video_upload(session['AWS_S3_TEMP_KEY']):
             return jsonify({'status': 4444})
 
         session.pop('TRACK_ID')
@@ -58,8 +52,7 @@ class UploadVideoInfoResource(Resource):
 
         v = VideoModel.init(session['id'], params['title'], session['username'], params['description'],
                             session['TRACK_ID'])
-        c_info = AWS.get_video_info(session['KEY']).copy()
-        c_info.update({'size': session['VIDEO_SIZE']})
+        c_info = AWS.get_video_info(session['AWS_S3_TEMP_KEY']).copy()
         v.update_i(c_info)
         VideoAdder.insert(v.serialize())
 
@@ -70,7 +63,6 @@ class UploadVideoInfoResource(Resource):
         UserUpdater.update_num_videos(session['id'])
         session.pop('TRACK_ID')
         session.pop('KEY')
-        session.pop('VIDEO_SIZE')
         return jsonify({'status': 2000})
 
 
@@ -103,7 +95,8 @@ class DeleteVideoResource(Resource):
         if not v:
             return jsonify({'status': 3011})
 
-        AWS.remove_video(v.track_id, session['id'])
+        prefix = f"users/{session['id']}/videos/{v.track_id}/"
+        AWS.remove_one_video(prefix)
         VideoDeleter.delete(v.track_id)
         return jsonify({'status': 2000})
 
