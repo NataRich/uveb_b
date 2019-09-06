@@ -161,7 +161,7 @@ class VideoModel(Models):
         self._hotness = hotness
 
     def set_dir(self):
-        self.dir = app.config['UPLOAD_PATH'] + f"{str(self.user_id)}/videos/{self.track_id}/"
+        self.dir = app.config['PERM_STORE_PATH'] + f"{str(self.user_id)}/videos/{self.track_id}/"
 
     def serialize(self, tags=None):
         if tags:
