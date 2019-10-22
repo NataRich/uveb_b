@@ -12,8 +12,8 @@ from ..controllers.db.fetchers import UserFetcher, VideoFetcher, TagFetcher
 from ..controllers.db.adders import UserAdder, VideoAdder, TagAdder
 from ..controllers.db.updaters import UserUpdater, VideoUpdater
 from ..controllers.db.deleters import UserDeleter, VideoDeleter
-from ..controllers.aws.aws import AWS
-from ..utility.utils import gen_code, gen_key
+from ..controllers.ali.ali import AliCloudService
+from ..utility.utils import gen_code
 
 
 def login_required(f):
