@@ -1,8 +1,8 @@
 import os
 # from dotenv import load_dotenv
-#
-#
-# PROJECT_FOLDER          = os.path.expanduser('/Users/apple/Desktop/uveb_b')
+
+
+# PROJECT_FOLDER          = os.path.expanduser('/Users/apple/Desktop/UVR/uveb_b')
 # load_dotenv(os.path.join(PROJECT_FOLDER, '.env'))
 
 
@@ -22,14 +22,11 @@ PROD_DB_USER            = os.getenv('PROD_DB_USER')
 PROD_DB_PASS            = os.getenv('PROD_DB_PASS')
 PROD_DB_SCHEMA          = os.getenv('PROD_DB_SCHEMA')
 
-PERM_STORE_PATH         = os.getenv('PERM_STORE_PATH')
-TEMP_STORE_PATH         = os.getenv('TEMP_STORE_PATH')
 SECRET_KEY              = os.getenv('SECRET_KEY')
-
-AWS_ACCESS_KEY          = os.getenv('AWS_ACCESS_KEY')
-AWS_SECRET_KEY          = os.getenv('AWS_SECRET_KEY')
 MAIN_BUCKET             = os.getenv('MAIN_BUCKET')
-TEMP_BUCKET             = os.getenv('TEMP_BUCKET')
+ALI_ACCESS_KEY          = os.getenv('ALI_ACCESS_KEY')
+ALI_SECRET_KEY          = os.getenv('ALI_SECRET_KEY')
+ALI_ENDPOINT            = os.getenv('ALI_ENDPOINT')
 
 TESTING                 = False if os.getenv('MAIL_TESTING') == 'False' else True
 MAIL_SERVER             = os.getenv('MAIL_SERVER')
