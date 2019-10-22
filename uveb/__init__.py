@@ -30,9 +30,8 @@ from uveb.resources.users.general import UserInfoResource, VerifyPasswordResourc
 from uveb.resources.users.loginRequired import LogoutResource, ChangeAccountResource, ChangeProfileImageResource
 from uveb.resources.videos.general import MainPageVideosByPropResource, WatchOneVideoResource, \
     UpdateVideoStatsResource
-from uveb.resources.videos.loginRequired import UploadOneVideoResource, UploadVideoInfoResource, \
-    SelfUploadedVideoResource, DeleteVideoResource
-
+from uveb.resources.videos.loginRequired import CheckTrackIdResource, UploadOneVideoResource, \
+    UploadVideoInfoResource, SelfUploadedVideoResource, DeleteVideoResource
 
 api.add_resource(IndexResource, '/')
 
@@ -53,6 +52,7 @@ api.add_resource(MainPageVideosByPropResource, '/videos')
 api.add_resource(WatchOneVideoResource, '/videos/fetch')
 api.add_resource(UpdateVideoStatsResource, '/videos/update_stats')
 
+api.add_resource(CheckTrackIdResource, '/videos/track_id')
 api.add_resource(UploadOneVideoResource, '/videos/upload_file')
 api.add_resource(UploadVideoInfoResource, '/videos/upload_info')
 api.add_resource(SelfUploadedVideoResource, '/videos/self_all')
