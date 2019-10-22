@@ -5,8 +5,22 @@ from .. import VideoModel, TagModel
 from .. import UserUpdater
 from .. import VideoFetcher, VideoAdder, VideoDeleter
 from .. import TagFetcher, TagAdder
-from .. import login_required, AWS, Validate
-from .. import gen_key
+from .. import login_required, Validate, AliCloudService
+
+
+class CheckTrackIdResource(Resource):
+    @staticmethod
+    @login_required
+    def post():
+        param = Validate.request(('track_id',), request.get_json())
+        if type(param) == int:
+            return jsonify({'status': param})
+
+        if VideoFetcher.fetch_by_track_id(param['track_id']):
+            return jsonify({'status': 3012})
+
+        session['TRACK_ID'] = param['track_id']
+        return jsonify({'status': 2000})
 
 
 class UploadOneVideoResource(Resource):
@@ -16,17 +30,21 @@ class UploadOneVideoResource(Resource):
         if 'file' not in request.files:
             return jsonify({'status': 3008})
 
+        if 'TRACK_ID' not in session:
+            return jsonify({'status': 3012})
+
         video = request.files['file']
         ext = video.filename.split('.')[1]
-        if not AWS.is_ext_allowed(ext, 'video'):
+        if not AliCloudService.is_ext_allowed(ext, 'video'):
             return jsonify({'status': 3007})
 
-        track_id = gen_key()
-        if not AWS.upload_video(video, session['id'], track_id):
+        tmp_key = f"users/tmp/videos/{session['TRACK_ID']}/{video.filename}"
+        if not AliCloudService.upload_video(video, tmp_key):
             return jsonify({'status': 4444})
 
-        session['TRACK_ID'] = track_id
-        session['AWS_S3_TEMP_KEY'] = 'uploads/videos/' + f'{track_id}.' + ext
+        session['VIDEO_INFO'] = AliCloudService.get_video_info(tmp_key)
+        session['ALI_OSS_TEMP_KEY'] = tmp_key
+        session['ALI_OSS_DST_KEY'] = f"users/{session['id']}/videos/{session['TRACK_ID']}/{video.filename}"
         return jsonify({'status': 2000})
 
     @staticmethod
@@ -35,10 +53,13 @@ class UploadOneVideoResource(Resource):
         if 'TRACK_ID' not in session:
             return jsonify({'status': 3009})
 
-        if not AWS.cancel_video_upload(session['AWS_S3_TEMP_KEY']):
+        if not AliCloudService.remove_obj(session['ALI_OSS_TEMP_KEY']):
             return jsonify({'status': 4444})
 
+        session.pop('VIDEO_INFO')
         session.pop('TRACK_ID')
+        session.pop('ALI_OSS_TEMP_KEY')
+        session.pop('ALI_OSS_DST_KEY')
         return jsonify({'status': 2000})
 
 
@@ -50,10 +71,15 @@ class UploadVideoInfoResource(Resource):
         if type(params) == int:
             return jsonify({'status': params})
 
+        if not AliCloudService.copy_obj(session['ALI_OSS_TEMP_KEY'], session['ALI_OSS_DST_KEY']):
+            return jsonify({'status': 4444})
+
+        if not AliCloudService.remove_obj(session['ALI_OSS_TEMP_KEY']):
+            return jsonify({'status': 4444})
+
         v = VideoModel.init(session['id'], params['title'], session['username'], params['description'],
                             session['TRACK_ID'])
-        c_info = AWS.get_video_info(session['AWS_S3_TEMP_KEY']).copy()
-        v.update_i(c_info)
+        v.update_i(session['VIDEO_INFO'])
         VideoAdder.insert(v.serialize())
 
         v = VideoFetcher.fetch_by_track_id(session['TRACK_ID'])
@@ -61,8 +87,10 @@ class UploadVideoInfoResource(Resource):
         TagAdder.insert(t.serialize())
 
         UserUpdater.update_num_videos(session['id'])
+        session.pop('VIDEO_INFO')
         session.pop('TRACK_ID')
-        session.pop('KEY')
+        session.pop('ALI_OSS_TEMP_KEY')
+        session.pop('ALI_OSS_DST_KEY')
         return jsonify({'status': 2000})
 
 
@@ -96,7 +124,7 @@ class DeleteVideoResource(Resource):
             return jsonify({'status': 3011})
 
         prefix = f"users/{session['id']}/videos/{v.track_id}/"
-        AWS.remove_one_video(prefix)
+        AliCloudService.remove_objs(prefix)
         VideoDeleter.delete(v.track_id)
         return jsonify({'status': 2000})
 

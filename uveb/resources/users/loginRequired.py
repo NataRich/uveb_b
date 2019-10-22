@@ -3,7 +3,7 @@ from flask_restful import Resource
 
 from .. import login_required
 from .. import gen_code
-from .. import Validate, SendMail, AWS
+from .. import Validate, SendMail, AliCloudService
 from .. import UserFetcher, UserUpdater
 
 
@@ -64,10 +64,11 @@ class ChangeProfileImageResource(Resource):
 
         image = request.files['image']
         ext = image.filename.split('.')[1]
-        if not AWS.is_ext_allowed(ext, 'image'):
+        if not AliCloudService.is_ext_allowed(ext, 'image'):
             return jsonify({'status': 3007})
 
-        if not AWS.upload_profile(image, session['id']):
+        key = f"users/{session['id']}/profile/{image.filename}"
+        if not AliCloudService.upload_profile(image, key):
             return jsonify({'status': 4444})
 
         user = UserFetcher.fetch_by_id(session['id'])
