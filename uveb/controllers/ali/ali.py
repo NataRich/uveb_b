@@ -1,5 +1,6 @@
 import oss2
 from oss2.models import PartInfo
+import ffmpeg
 
 from uveb import app
 
