@@ -9,7 +9,7 @@ CREATE TABLE users (
     identity SMALLINT(6) NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     date DATE NOT NULL,
-    numVideos INT(11) NOT NULL DEFAULT 1,
+    numVideos INT(11) NOT NULL DEFAULT 0,
     authenticated TINYINT(4) NOT NULL DEFAULT 0,
     thumbImage VARCHAR(255) NULL,
 	mediumImage VARCHAR(255) NULL
