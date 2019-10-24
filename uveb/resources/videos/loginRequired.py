@@ -100,7 +100,7 @@ class SelfUploadedVideoResource(Resource):
     def post():
         params = Validate.request(('page', 'sort_by', 'order'), request.get_json())
         if type(params) == int:
-            return jsonify({'status': params})
+            return jsonify({'status': params, 'videos': []})
 
         vs = VideoFetcher.fetch_all_by_user_id(session['id'], offset=(params['page'] - 1) * 5,
                                                by_col=params['sort_by'], asc=params['order'])

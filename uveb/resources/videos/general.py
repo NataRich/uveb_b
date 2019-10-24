@@ -10,7 +10,7 @@ class MainPageVideosByPropResource(Resource):
     def post():
         params = Validate.request(('page', 'tags', 'sort_by', 'order', 'title'), request.get_json())
         if type(params) == int:
-            return jsonify({'status': params})
+            return jsonify({'status': params, 'videos': []})
 
         if not params['tags']:
             vs = VideoFetcher.fetch_all(limit=8, offset=(params['page'] - 1)*8,
@@ -27,10 +27,10 @@ class MainPageVideosByPropResource(Resource):
                                             by_col=params['sort_by'], asc=params['order'], title=params['title'])
 
         if not vs:
-            return jsonify({'videos': []})
+            return jsonify({'status': 3011, 'videos': []})
 
         c = [v.serialize(tags=TagFetcher.fetch_by_video_id(v.id)) for v in vs]
-        return jsonify({'videos': c})
+        return jsonify({'status': 2000, 'videos': c})
 
 
 class WatchOneVideoResource(Resource):
