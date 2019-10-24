@@ -84,28 +84,30 @@ class UploadVideoInfoResource(Resource):
         if not AliCloudService.remove_obj(session['ALI_OSS_TEMP_KEY']):
             return jsonify({'status': 4444})
 
-        if VideoFetcher.fetch_by_track_id(session['TRACK_ID']).user_id == session['id']:
+        v = VideoFetcher.fetch_by_track_id(session['TRACK_ID'])
+        if v and v.user_id == session['id']:
             session.pop('VIDEO_INFO')
             session.pop('TRACK_ID')
             session.pop('ALI_OSS_TEMP_KEY')
             session.pop('ALI_OSS_DST_KEY')
             return jsonify({'status': 2000})
 
-        v = VideoModel.init(session['id'], params['title'], session['username'], params['description'],
-                            session['TRACK_ID'])
-        v.update_i(session['VIDEO_INFO'])
-        VideoAdder.insert(v.serialize())
+        else:
+            v = VideoModel.init(session['id'], params['title'], session['username'], params['description'],
+                                session['TRACK_ID'])
+            v.update_i(session['VIDEO_INFO'])
+            VideoAdder.insert(v.serialize())
 
-        v = VideoFetcher.fetch_by_track_id(session['TRACK_ID'])
-        t = TagModel(v.id, v.track_id, params['tags']['vr'], params['tags']['campus'], params['tags']['event'])
-        TagAdder.insert(t.serialize())
+            v = VideoFetcher.fetch_by_track_id(session['TRACK_ID'])
+            t = TagModel(v.id, v.track_id, params['tags']['vr'], params['tags']['campus'], params['tags']['event'])
+            TagAdder.insert(t.serialize())
 
-        UserUpdater.update_num_videos(session['id'])
-        session.pop('VIDEO_INFO')
-        session.pop('TRACK_ID')
-        session.pop('ALI_OSS_TEMP_KEY')
-        session.pop('ALI_OSS_DST_KEY')
-        return jsonify({'status': 2000})
+            UserUpdater.update_num_videos(session['id'])
+            session.pop('VIDEO_INFO')
+            session.pop('TRACK_ID')
+            session.pop('ALI_OSS_TEMP_KEY')
+            session.pop('ALI_OSS_DST_KEY')
+            return jsonify({'status': 2000})
 
 
 class SelfUploadedVideoResource(Resource):
