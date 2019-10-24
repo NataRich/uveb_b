@@ -17,7 +17,7 @@ class CheckTrackIdResource(Resource):
             return jsonify({'status': param})
 
         v = VideoFetcher.fetch_by_track_id(param['track_id'])
-        if not v:
+        if v:
             return jsonify({'status': 3012})
 
         if v.user_id == session['id']:
