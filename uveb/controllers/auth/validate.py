@@ -33,8 +33,3 @@ class Validate:
 
         else:
             return 2000
-
-    @staticmethod
-    def is_user_in_db(key_dict):
-        user = UserFetcher.fetch(key_dict)
-        return user if user else False
