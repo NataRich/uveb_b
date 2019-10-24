@@ -9,12 +9,14 @@ app.config.from_pyfile('config.py')
 
 if app.config['ENV'] == 'development':
     app.config['DB_HOST'] = app.config['DEV_DB_HOST']
+    app.config['DB_PORT'] = app.config['DEV_DB_PORT']
     app.config['DB_USER'] = app.config['DEV_DB_USER']
     app.config['DB_PASS'] = app.config['DEV_DB_PASS']
     app.config['DB_SCHEMA'] = app.config['DEV_DB_SCHEMA']
 
 else:
     app.config['DB_HOST'] = app.config['PROD_DB_HOST']
+    app.config['DB_PORT'] = app.config['PROD_DB_PORT']
     app.config['DB_USER'] = app.config['PROD_DB_USER']
     app.config['DB_PASS'] = app.config['PROD_DB_PASS']
     app.config['DB_SCHEMA'] = app.config['PROD_DB_SCHEMA']
@@ -64,6 +66,7 @@ def before_request():
     conn = connect(
         host=app.config['DB_HOST'],
         user=app.config['DB_USER'],
+        port=app.config['DB_PORT'],
         password=app.config['DB_PASS'],
         database=app.config['DB_SCHEMA']
     )
