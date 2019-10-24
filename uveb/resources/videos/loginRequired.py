@@ -31,7 +31,7 @@ class UploadOneVideoResource(Resource):
             return jsonify({'status': 3008})
 
         if 'TRACK_ID' not in session:
-            return jsonify({'status': 3012})
+            return jsonify({'status': 3008})
 
         video = request.files['file']
         ext = video.filename.split('.')[1]
