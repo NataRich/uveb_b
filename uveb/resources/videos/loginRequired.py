@@ -16,8 +16,12 @@ class CheckTrackIdResource(Resource):
         if type(param) == int:
             return jsonify({'status': param})
 
-        if VideoFetcher.fetch_by_track_id(param['track_id']):
+        v = VideoFetcher.fetch_by_track_id(param['track_id'])
+        if not v:
             return jsonify({'status': 3012})
+
+        if v.user_id == session['id']:
+            return jsonify({'status': 3013})
 
         session['TRACK_ID'] = param['track_id']
         return jsonify({'status': 2000})
