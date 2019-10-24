@@ -75,11 +75,21 @@ class UploadVideoInfoResource(Resource):
         if type(params) == int:
             return jsonify({'status': params})
 
+        if 'TRACK_ID' not in session:
+            return jsonify({'status': 3014})
+
         if not AliCloudService.copy_obj(session['ALI_OSS_TEMP_KEY'], session['ALI_OSS_DST_KEY']):
             return jsonify({'status': 4444})
 
         if not AliCloudService.remove_obj(session['ALI_OSS_TEMP_KEY']):
             return jsonify({'status': 4444})
+
+        if VideoFetcher.fetch_by_track_id(session['TRACK_ID']).user_id == session['id']:
+            session.pop('VIDEO_INFO')
+            session.pop('TRACK_ID')
+            session.pop('ALI_OSS_TEMP_KEY')
+            session.pop('ALI_OSS_DST_KEY')
+            return jsonify({'status': 2000})
 
         v = VideoModel.init(session['id'], params['title'], session['username'], params['description'],
                             session['TRACK_ID'])
