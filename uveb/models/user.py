@@ -109,8 +109,9 @@ class UserModel(Models):
         self._medium_image = medium_image
 
     def set_path(self, ext):
-        self.thumb_image = 'https://' + app.config['ENDPOINT'] + f"{self.id}/profile/thumb.{ext}"
-        self.medium_image = 'https://' + app.config['ENDPOINT'] + f"{self.id}/profile/medium.{ext}"
+        self.thumb_image = f"https://{app.config['MAIN_BUCKET']}.{app.config['ENDPOINT']}/{self.id}/profile/thumb.{ext}"
+        self.medium_image = f"https://{app.config['MAIN_BUCKET']}.{app.config['ENDPOINT']}/{self.id}" \
+            f"/profile/medium.{ext}"
 
     def identify(self):
         self.identity = Models.map(self.email)
