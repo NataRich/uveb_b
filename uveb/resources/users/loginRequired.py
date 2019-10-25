@@ -72,7 +72,7 @@ class ChangeProfileImageResource(Resource):
             return jsonify({'status': 4444})
 
         user = UserFetcher.fetch_by_id(session['id'])
-        user.set_path(ext)
+        user.set_path(image.filename)
         UserUpdater.update(user.serialize(), {'id': session['id']})
         return jsonify({'status': 2000})
 
