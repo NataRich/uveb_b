@@ -78,9 +78,6 @@ def after_request(response):
     Init.conn.close()
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST')
-    response.headers.add('Set-Cookie', 'SameSite=None; Secure')
     return response
 
 
-# if __name__ == '__main__':
-#     app.run(host='127.0.0.1', port=4000)

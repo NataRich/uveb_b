@@ -25,6 +25,9 @@ PROD_DB_PASS            = os.getenv('PROD_DB_PASS')
 PROD_DB_SCHEMA          = os.getenv('PROD_DB_SCHEMA')
 
 SECRET_KEY              = os.getenv('SECRET_KEY')
+SESSION_COOKIE_SECURE   = True
+SESSION_COOKIE_HTTPONLY = True
+SECRET_COOKIE_SAMESITE  = 'Lax'
 MAIN_BUCKET             = os.getenv('MAIN_BUCKET')
 ALI_ACCESS_KEY          = os.getenv('ALI_ACCESS_KEY')
 ALI_SECRET_KEY          = os.getenv('ALI_SECRET_KEY')

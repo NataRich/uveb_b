@@ -15,29 +15,11 @@ class UserInfoResource(Resource):
             session['username'] = user.username
             session['email'] = user.email
 
-            res = make_response('status', 2000)
-            res.set_cookie('user',
-                           value=user.serialize(),
-                           path=request.path,
-                           secure=True,
-                           httponly=False,
-                           samesite='Lax'
-                           )
-            # return jsonify({'user': UserFetcher.fetch_by_id(session['id']).serialize()})
-            return res
+            return jsonify({'user': user.serialize()})
 
         else:
             session.clear()
-            res = make_response('status', 2000)
-            res.set_cookie('user',
-                           value=None,
-                           path=request.path,
-                           secure=True,
-                           httponly=False,
-                           samesite='Lax'
-                           )
-            # return jsonify({'user': None})
-            return res
+            return jsonify({'user': None})
 
 
 class VerifyPasswordResource(Resource):
