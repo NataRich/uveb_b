@@ -31,7 +31,13 @@ class UserInfoResource(Resource):
         else:
             session.clear()
             res = make_response('status', 2000)
-            res.set_cookie('user', None)
+            res.set_cookie('user',
+                           value=None,
+                           path=request.path,
+                           secure=True,
+                           httponly=False,
+                           samesite=False
+                           )
             # return jsonify({'user': None})
             return res
 
