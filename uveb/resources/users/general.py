@@ -17,7 +17,13 @@ class UserInfoResource(Resource):
             session['email'] = user.email
 
             res = make_response('status', 2000)
-            res.set_cookie('user', user.serialize())
+            res.set_cookie('user',
+                           value=user.serialize(),
+                           path=request.path,
+                           secure=True,
+                           httponly=False,
+                           samesite=False
+                           )
 
             # return jsonify({'user': UserFetcher.fetch_by_id(session['id']).serialize()})
             return res
