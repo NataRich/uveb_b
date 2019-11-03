@@ -1,4 +1,4 @@
-from flask import request, session, jsonify
+from flask import request, session, jsonify, make_response
 from flask_restful import Resource
 
 from .. import UserModel
@@ -15,17 +15,19 @@ class UserInfoResource(Resource):
             session['id'] = user.id
             session['username'] = user.username
             session['email'] = user.email
-            session['identity'] = user.identity
-            session['authenticated'] = user.authenticated
-            session['num_video'] = user.num_video
-            session['thumb_image'] = user.thumb_image
-            session['medium_image'] = user.medium_image
 
-            return jsonify({'user': UserFetcher.fetch_by_id(session['id']).serialize()})
+            res = make_response('status', 2000)
+            res.set_cookie('user', user.serialize())
+
+            # return jsonify({'user': UserFetcher.fetch_by_id(session['id']).serialize()})
+            return res
 
         else:
             session.clear()
-            return jsonify({'user': None})
+            res = make_response('status', 2000)
+            res.set_cookie('user', None)
+            # return jsonify({'user': None})
+            return res
 
 
 class VerifyPasswordResource(Resource):
