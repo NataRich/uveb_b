@@ -12,7 +12,6 @@ class UserInfoResource(Resource):
     def get():
         if 'id' in session:
             user = UserFetcher.fetch_by_id(session['id'])
-            session['id'] = user.id
             session['username'] = user.username
             session['email'] = user.email
 
@@ -22,8 +21,9 @@ class UserInfoResource(Resource):
                            path=request.path,
                            secure=True,
                            httponly=False,
-                           samesite=None
+                           samesite='Lax'
                            )
+            res.headers.add('Set-Cookie', 'SameSite=None; Secure')
 
             # return jsonify({'user': UserFetcher.fetch_by_id(session['id']).serialize()})
             return res
@@ -36,7 +36,7 @@ class UserInfoResource(Resource):
                            path=request.path,
                            secure=True,
                            httponly=False,
-                           samesite=None
+                           samesite='Lax'
                            )
             # return jsonify({'user': None})
             return res
