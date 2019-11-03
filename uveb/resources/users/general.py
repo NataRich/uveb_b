@@ -23,8 +23,6 @@ class UserInfoResource(Resource):
                            httponly=False,
                            samesite='Lax'
                            )
-            res.headers.add('Set-Cookie', 'SameSite=None; Secure')
-
             # return jsonify({'user': UserFetcher.fetch_by_id(session['id']).serialize()})
             return res
 

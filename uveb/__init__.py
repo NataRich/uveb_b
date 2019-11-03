@@ -78,6 +78,7 @@ def after_request(response):
     Init.conn.close()
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST')
+    response.headers.add('Set-Cookie', 'SameSite=None; Secure')
     return response
 
 
