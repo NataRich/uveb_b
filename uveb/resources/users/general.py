@@ -22,7 +22,7 @@ class UserInfoResource(Resource):
                            path=request.path,
                            secure=True,
                            httponly=False,
-                           samesite=False
+                           samesite=None
                            )
 
             # return jsonify({'user': UserFetcher.fetch_by_id(session['id']).serialize()})
@@ -36,7 +36,7 @@ class UserInfoResource(Resource):
                            path=request.path,
                            secure=True,
                            httponly=False,
-                           samesite=False
+                           samesite=None
                            )
             # return jsonify({'user': None})
             return res
