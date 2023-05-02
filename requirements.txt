@@ -10,7 +10,7 @@ chardet==3.0.4
 Click==7.0
 crcmod==1.7
 ffmpeg-python==0.2.0
-Flask==1.0.4
+Flask==2.2.5
 Flask-Babel==0.12.2
 Flask-Cors==3.0.8
 Flask-Mail==0.9.1
